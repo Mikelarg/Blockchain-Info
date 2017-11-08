@@ -43,7 +43,7 @@ if __name__ == '__main__':
                 kwargs["outcoming"] = True
             if args.format:
                 kwargs["transaction_format"] = args.format
-            print exp.print_data(**kwargs)
+            exp.print_data(**kwargs)
     except APIException as e:
         print "API Exception ({0})".format(e.message)
     except Exception as e:
