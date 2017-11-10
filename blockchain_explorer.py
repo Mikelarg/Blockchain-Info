@@ -1,16 +1,7 @@
 # coding=utf-8
 import argparse
-import ecdsa
-import os
-
-import signal
-
 import sys
-from blockchain import blockexplorer
-from blockchain.exceptions import APIException
-
-from blockchain_info import Explorer
-from blockchain_info.address_utils import generate_keys
+from urllib2 import URLError
 
 
 def parse_arg():
@@ -21,18 +12,19 @@ def parse_arg():
     parser.add_argument("-o", "--outcoming", action="store_true", help="Print out transactions of addresses")
     parser.add_argument("-f", "--format", action="store", type=str,
                         help='Custom format for transaction string {d} — Transaction Date {a} — Transaction Address {'
-                             's} — BTC Value')
+                             's} — BTC Value. Example: "Transaction {s} completed {d} to address {a}"')
     return parser.parse_args()
 
 
 if __name__ == '__main__':
     try:
+        from blockchain.exceptions import APIException
+        from blockchain_info import Explorer
         args = parse_arg()
 
-        # l = Explorer.get_balance(generate_keys()[2])
         exp = Explorer(args.addresses if len(args.addresses) > 0 else None)
         if len(args.addresses) == 0:
-            print exp.print_data(balance=True, secret=True, headers=False)
+            exp.print_data(balance=True, secret=True, headers=False)
         else:
             kwargs = {}
             if args.balance:
@@ -44,8 +36,12 @@ if __name__ == '__main__':
             if args.format:
                 kwargs["transaction_format"] = args.format
             exp.print_data(**kwargs)
+    except ImportError as e:
+        print "Some Modules not Installed! ({0})".format(e.message)
     except APIException as e:
         print "API Exception ({0})".format(e.message)
+    except URLError as e:
+        print "No Internet Connection!"
     except Exception as e:
         print "Exception! {0}".format(e.message)
     finally:

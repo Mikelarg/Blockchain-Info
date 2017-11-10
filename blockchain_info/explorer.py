@@ -43,7 +43,7 @@ class Explorer:
             self.addresses_data = addresses_data
         else:
             self.addresses = tuple(addresses)
-            self.addresses_data = blockexplorer.get_multi_address(self.addresses)
+            self.addresses_data = blockexplorer.get_multi_address(self.addresses, limit=self.limit)
         self.trx_limit = self.addresses_data.n_tx
 
     @staticmethod
@@ -122,11 +122,11 @@ class Explorer:
                 if len(errors) > 0:
                     data.append("{0}Transactions Errors:{0}".format(os.linesep))
                     data.append(errors)
-                if incoming:
+                if incoming and len(in_transactions) > 0:
                     if headers:
                         data.append("{0}Incoming Transactions:{0}".format(os.linesep))
                     data.append(self._get_transactions_data(in_transactions))
-                if outcoming:
+                if outcoming and len(out_transaction) > 0:
                     if headers:
                         data.append("{0}Outcoming Transactions:{0}".format(os.linesep))
                     data.append(self._get_transactions_data(out_transaction))

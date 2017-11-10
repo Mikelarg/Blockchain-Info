@@ -4,7 +4,7 @@ import ecdsa.util
 import hashlib
 from blockchain import blockexplorer
 
-b58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+B58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 
 
 def generate_keys():
@@ -65,6 +65,6 @@ def base256decode(s):
 def base58encode(n):
     result = ''
     while n > 0:
-        result = b58[n % 58] + result
+        result = B58[n % 58] + result
         n /= 58
     return result
